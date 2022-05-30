@@ -90,7 +90,7 @@ public class ProductController {
     ) throws IOException {
         return Files.readAllBytes(Paths.get(
                 System.getProperty("user.home") +
-                        "/eclipse-workspace/Fruit-Shop-api/Images/" +
+                        "/Documents/PersonalProjects/Fruit-Shop-api-java/src/main/resources/Images/" +
                         imageName
         ));
     }

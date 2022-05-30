@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.Map;
 
+//might become absolete as I integrate oauth2
 @RestController
 @RequestMapping(path="/fruits/authorization")
 public class UserController {
