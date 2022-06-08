@@ -35,7 +35,7 @@ public class AddressServiceImpl implements AddressService {
         List<Address> addressesFromCart = cart.getAddresses();
         addressesFromCart.forEach( address -> {
             if(address.getType().equals(addressType)) {
-                throw new AlreadyExistsException("A "+ addressType.toString() + " address already exists");
+                throw new AlreadyExistsException("A "+ addressType + " address already exists");
             }
         });
 
@@ -43,11 +43,19 @@ public class AddressServiceImpl implements AddressService {
 
         //The strategy is creating the address in user if user never added addresses for a previous delivery
         UserEntity userFromCart = cart.getUserEntityInCart();
+        //There will be no "stranded" carts with incomplete data. When user places an order without account
+        //a big payload with all the information about the user will be sent to paying provider, the cart with completed
+        //information will just serve as an order history for internal use
+        if(userFromCart == null)
+            throw new NotFoundException("No user associated with cart "+ cartId);
+
         List<Address> addressesFromUser = userFromCart.getAddresses();
-        Boolean addressWithGivenTypeExists = false;
+        boolean addressWithGivenTypeExists = false;
         for(Address address : addressesFromUser) {
-            if(address.getType().equals(addressType))
+            if(address.getType().equals(addressType)) {
                 addressWithGivenTypeExists = true;
+                break;
+            }
         }
 
         if(!addressWithGivenTypeExists)
@@ -62,7 +70,7 @@ public class AddressServiceImpl implements AddressService {
         Optional<Cart> optionalCart = cartRepo.findById(cartId);
         Cart cart = optionalCart.get();
 
-        Boolean addressWithGivenTypeExists = false;
+        boolean addressWithGivenTypeExists = false;
         UUID addressId = null;
         for(Address address : cart.getAddresses()) {
             if(address.getType().equals(addressType)){
@@ -85,7 +93,7 @@ public class AddressServiceImpl implements AddressService {
         Optional<Cart> optionalCart = cartRepo.findById(cartId);
 
         Cart cart = optionalCart.get();
-        Boolean addressWithGivenTypeExists = false;
+        boolean addressWithGivenTypeExists = false;
         UUID addressId = null;
         for(Address address : cart.getAddresses()) {
             if(address.getType().equals(addressType)){

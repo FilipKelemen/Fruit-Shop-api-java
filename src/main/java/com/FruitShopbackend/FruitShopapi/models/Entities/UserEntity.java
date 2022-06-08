@@ -6,11 +6,10 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -18,17 +17,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class UserEntity {
 
 	@Id
-	@GeneratedValue
-	private UUID userId;
-	@Column(unique = true)
-	@NotEmpty( message = "Email should not be empty or null")
-	private String email;
-	@NotNull
-	private String password;
-	@NotNull
-	private String firstName;
-	@NotNull
-	private String lastName;
+	private UUID email;
 	@NotNull
 	private boolean admin;
 	@CreationTimestamp
@@ -36,6 +25,7 @@ public class UserEntity {
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
 	@JsonManagedReference
+	@Size(max=2)
 	@OneToMany(
 		mappedBy = "userEntityInAddress",
 		cascade = CascadeType.ALL,
@@ -50,60 +40,48 @@ public class UserEntity {
         orphanRemoval = true)
 	private List<Cart> carts = new ArrayList<>();
 
-	
-	public UserEntity() {}
+	public UserEntity() {
+	}
 
-	public UserEntity(UUID userId, @NotEmpty(message = "Email should not be empty or null") String email,
-					  @NotNull String password, @NotNull String firstName, @NotNull String lastName, List<Address> addresses,
-					  List<Cart> carts, boolean admin) {
-		this.userId = userId;
+	public UserEntity(UUID email, boolean admin, LocalDateTime createdAt, LocalDateTime updatedAt, List<Address> addresses, List<Cart> carts) {
 		this.email = email;
-		this.password = password;
-		this.firstName = firstName;
-		this.lastName = lastName;
+		this.admin = admin;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 		this.addresses = addresses;
 		this.carts = carts;
-		this.admin = admin;
 	}
 
-	public UUID getUserId() {
-		return userId;
-	}
-
-	public void setUserId(UUID userId) {
-		this.userId = userId;
-	}
-
-	public String getEmail() {
+	public UUID getEmail() {
 		return email;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setEmail(UUID gmail) {
+		this.email = gmail;
 	}
 
-	public String getPassword() {
-		return password;
+	public boolean isAdmin() {
+		return admin;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setAdmin(boolean admin) {
+		this.admin = admin;
 	}
 
-	public String getFirstName() {
-		return firstName;
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public String getLastName() {
-		return lastName;
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 
 	public List<Address> getAddresses() {
@@ -122,27 +100,15 @@ public class UserEntity {
 		this.carts = carts;
 	}
 
-	public boolean isAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(boolean admin) {
-		this.admin = admin;
-	}
-
 	@Override
 	public String toString() {
-		return "User{" +
-				"userId=" + userId +
-				", email='" + email + '\'' +
-				", password='" + password + '\'' +
-				", firstName='" + firstName + '\'' +
-				", lastName='" + lastName + '\'' +
+		return "UserEntity{" +
+				"gmail=" + email +
 				", admin=" + admin +
-				", addresses=" + addresses +
-				", carts=" + carts +
 				", createdAt=" + createdAt +
 				", updatedAt=" + updatedAt +
+				", addresses=" + addresses +
+				", carts=" + carts +
 				'}';
 	}
 }
