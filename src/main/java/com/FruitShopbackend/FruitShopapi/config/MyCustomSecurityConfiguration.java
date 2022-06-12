@@ -19,9 +19,7 @@ public class MyCustomSecurityConfiguration {
                             "/fruits/product/page-and-number-of-pages-{pageNumber}/sortedBy-{sortingMode}",
                             "/fruits/product/page-{pageNumber}/sortedBy-{sortingMode}",
                             "/fruits/cart/{cartId}/address/{addressType}",
-                            "/fruits/product/image/{imageName}",
-                            "/fruits/cart").permitAll()
-                    .antMatchers(HttpMethod.POST,"/fruits/authorization/register").permitAll()
+                            "/fruits/product/image/{imageName}").permitAll()
                     .anyRequest().authenticated()
             )
             .oauth2ResourceServer(oauth2 -> oauth2

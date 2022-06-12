@@ -28,7 +28,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Page<Product> getPageAndNumberOfPages(Integer pageNumber, SortingMode sortingMode) {
-        System.out.println(sortingMode);
         if(pageNumber < 1)
             throw new ProblemWithFieldsException("The page number is below 1");
         Pageable sortedPage = sortingMode.getPageWithSortingSpecified(pageNumber);

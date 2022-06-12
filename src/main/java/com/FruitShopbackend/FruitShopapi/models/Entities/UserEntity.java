@@ -11,13 +11,13 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 public class UserEntity {
-
 	@Id
-	private UUID email;
+	private String email;
 	@NotNull
 	private boolean admin;
 	@CreationTimestamp
@@ -43,21 +43,23 @@ public class UserEntity {
 	public UserEntity() {
 	}
 
-	public UserEntity(UUID email, boolean admin, LocalDateTime createdAt, LocalDateTime updatedAt, List<Address> addresses, List<Cart> carts) {
+	public UserEntity(String email, boolean admin, List<Address> addresses, List<Cart> carts) {
 		this.email = email;
 		this.admin = admin;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
 		this.addresses = addresses;
 		this.carts = carts;
 	}
+	public UserEntity(String email, boolean admin) {
+		this.email = email;
+		this.admin = admin;
+	}
 
-	public UUID getEmail() {
+	public String getEmail() {
 		return email;
 	}
 
-	public void setEmail(UUID gmail) {
-		this.email = gmail;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public boolean isAdmin() {
@@ -103,7 +105,7 @@ public class UserEntity {
 	@Override
 	public String toString() {
 		return "UserEntity{" +
-				"gmail=" + email +
+				"email=" + email +
 				", admin=" + admin +
 				", createdAt=" + createdAt +
 				", updatedAt=" + updatedAt +

@@ -54,12 +54,17 @@ public class Cart {
 
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "email")
 	private UserEntity userEntityInCart;
 	
 	public Cart() {
-		this.total = 0l;
+		this.total = 0L;
 		this.status = StatusInCart.ACTIVE;
+	}
+	public Cart(UserEntity userEntityInCart) {
+		this.total = 0L;
+		this.status = StatusInCart.ACTIVE;
+		this.userEntityInCart = userEntityInCart;
 	}
 
 	public Cart(UUID cartId, @NotNull Long total, @NotNull String paymentMethod,StatusInCart status,
