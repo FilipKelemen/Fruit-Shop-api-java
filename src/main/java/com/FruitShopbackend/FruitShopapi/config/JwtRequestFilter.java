@@ -18,6 +18,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -70,8 +71,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 //            }
         filterChain.doFilter(request, response);
     }
-    void handleNewOrOldUser(String requestURI, String email) {
-        UserEntity user = userRepo.fetchUserEagerly(email);
+    @Transactional
+    void handleNewOrOldUser(final String requestURI,final String email) {
+        Optional<UserEntity> optionalUser = userRepo.findById(email);
+        List<Cart> cartList = optionalUser.get().getCarts();
+//
 //        if(optionalUser.isEmpty()) {
 //            createNewAccount(email);
 //        } else {
