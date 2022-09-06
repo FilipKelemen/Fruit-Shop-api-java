@@ -1,5 +1,6 @@
 package com.FruitShopbackend.FruitShopapi.models.Entities;
 
+import com.FruitShopbackend.FruitShopapi.utility.PriceUtility;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.CreationTimestamp;
@@ -139,7 +140,11 @@ public class Product {
 	}
 
 	public String getFormattedPrice() {
-		return (priceValue / 100) + "," + (priceValue % 100) + "$";
+		try {
+			return PriceUtility.getFormattedPrice(priceValue,"$");
+		} catch (Exception exception) {
+			return exception.getMessage();
+		}
 	}
 
 	public String getCurrency() {
@@ -180,7 +185,7 @@ public class Product {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Product product = (Product) o;
-		return priceValue == product.priceValue && Objects.equals(productId, product.productId) && Objects.equals(name, product.name) && Objects.equals(numberInStock, product.numberInStock) && Objects.equals(imageUrl, product.imageUrl) && Objects.equals(formattedPrice, product.formattedPrice) && Objects.equals(currency, product.currency) && Objects.equals(description, product.description) && Objects.equals(createdAt, product.createdAt) && Objects.equals(updatedAt, product.updatedAt) && Objects.equals(cartEntries, product.cartEntries) && Objects.equals(colors, product.colors);
+		return Objects.equals(priceValue, product.priceValue) && Objects.equals(productId, product.productId) && Objects.equals(name, product.name) && Objects.equals(numberInStock, product.numberInStock) && Objects.equals(imageUrl, product.imageUrl) && Objects.equals(formattedPrice, product.formattedPrice) && Objects.equals(currency, product.currency) && Objects.equals(description, product.description) && Objects.equals(createdAt, product.createdAt) && Objects.equals(updatedAt, product.updatedAt) && Objects.equals(cartEntries, product.cartEntries) && Objects.equals(colors, product.colors);
 	}
 
 	@Override

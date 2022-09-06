@@ -30,3 +30,6 @@ spring:
 server:
   error:
     include-message: always
+
+URL_PATHS:
+  cart: /fruits/cart/

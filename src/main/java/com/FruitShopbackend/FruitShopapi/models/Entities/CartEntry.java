@@ -1,6 +1,7 @@
 package com.FruitShopbackend.FruitShopapi.models.Entities;
 
 
+import com.FruitShopbackend.FruitShopapi.utility.PriceUtility;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.CreationTimestamp;
@@ -73,6 +74,14 @@ public class CartEntry {
 		this.cartEntryId = cartEntryId;
 	}
 
+	public String getFormattedTotal() {
+		try {
+			return PriceUtility.getFormattedPrice(product.getPriceValue() * quantity,"$");
+		} catch (Exception exception) {
+			return exception.getMessage();
+		}
+	}
+
 	public int getQuantity() {
 		return quantity;
 	}
@@ -103,6 +112,7 @@ public class CartEntry {
 				"cartEntryId=" + cartEntryId +
 				", quantity=" + quantity +
 				", product=" + product +
+				", formattedPrice='" + getFormattedTotal() + '\'' +
 				", createdAt=" + createdAt +
 				", updatedAt=" + updatedAt +
 				'}';

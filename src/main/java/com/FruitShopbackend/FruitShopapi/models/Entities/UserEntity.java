@@ -27,6 +27,7 @@ public class UserEntity {
 	@JsonManagedReference
 	@Size(max=2)
 	@OneToMany(
+		fetch = FetchType.LAZY,
 		mappedBy = "userEntityInAddress",
 		cascade = CascadeType.ALL,
         orphanRemoval = true
@@ -35,6 +36,7 @@ public class UserEntity {
 
 	@JsonManagedReference
 	@OneToMany(
+		fetch = FetchType.LAZY,
 		mappedBy = "userEntityInCart",
 		cascade = CascadeType.ALL,
         orphanRemoval = true)

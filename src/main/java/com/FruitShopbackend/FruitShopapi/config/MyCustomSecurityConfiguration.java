@@ -12,6 +12,7 @@ public class MyCustomSecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         //todo remove h2 permission in production
+        //todo remove cart endpoints
         http
             .authorizeRequests().antMatchers("/fruits/h2/**").permitAll().and()
             .authorizeHttpRequests(authorize -> authorize
@@ -27,7 +28,7 @@ public class MyCustomSecurityConfiguration {
                             .jwkSetUri("https://www.googleapis.com/oauth2/v3/certs")
                     )
             );
-        http.cors();
+        http.cors().and().csrf().disable();
         return http.build();
     }
     @Bean

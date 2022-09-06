@@ -1,5 +1,6 @@
 package com.FruitShopbackend.FruitShopapi.models.responses;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.http.HttpStatus;
 
@@ -9,6 +10,7 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Response {
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     protected LocalDateTime timestamp;
     protected int statusCode;
     protected HttpStatus status;

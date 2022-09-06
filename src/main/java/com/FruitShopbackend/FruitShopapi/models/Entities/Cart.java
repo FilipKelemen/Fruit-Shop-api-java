@@ -9,10 +9,12 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import com.FruitShopbackend.FruitShopapi.models.Entities.models.StatusInCart;
+import com.FruitShopbackend.FruitShopapi.utility.PriceUtility;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 public class Cart {
@@ -56,7 +58,7 @@ public class Cart {
 	@ManyToOne
 	@JoinColumn(name = "email")
 	private UserEntity userEntityInCart;
-	
+
 	public Cart() {
 		this.total = 0L;
 		this.status = StatusInCart.ACTIVE;
@@ -95,7 +97,11 @@ public class Cart {
 	}
 
 	public String getFormattedTotal() {
-		return (total / 100) + "," + (total % 100) + "$";
+		try {
+			return PriceUtility.getFormattedPrice(total,"$");
+		} catch (Exception exception) {
+			return exception.getMessage();
+		}
 	}
 
 	public String getPaymentMethod() {
