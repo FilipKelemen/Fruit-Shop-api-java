@@ -9,12 +9,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import com.FruitShopbackend.FruitShopapi.models.Entities.models.StatusInCart;
-import com.FruitShopbackend.FruitShopapi.utility.PriceUtility;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 public class Cart {
@@ -96,14 +94,6 @@ public class Cart {
 		this.total = total;
 	}
 
-	public String getFormattedTotal() {
-		try {
-			return PriceUtility.getFormattedPrice(total,"$");
-		} catch (Exception exception) {
-			return exception.getMessage();
-		}
-	}
-
 	public String getPaymentMethod() {
 		return paymentMethod;
 	}
@@ -148,8 +138,6 @@ public class Cart {
 	public String toString() {
 		return "Cart{" +
 				"cartId=" + cartId +
-				", total=" + total +
-				", formattedTotal='" + getFormattedTotal() + '\'' +
 				", paymentMethod='" + paymentMethod + '\'' +
 				", status=" + status +
 				", cartEntries=" + cartEntries +
