@@ -27,7 +27,7 @@ public class AddressController {
             @PathVariable("addressType") AddressType addressType,
             @Valid @RequestBody AddressRequestDTO addressFromRequest
     ) {
-        String formattedAddressType = addressType.toString().substring(0,1).toUpperCase() + addressType.toString().substring(1);
+        String formattedAddressType = addressType.toString().substring(0,1).toUpperCase() + addressType.toString().substring(1).toLowerCase();
         Response response = new Response(
                 LocalDateTime.now(),
                 HttpStatus.OK.value(),
@@ -43,12 +43,12 @@ public class AddressController {
     }
 
     @PatchMapping(path = {"","/"})
-    public ResponseEntity<Response> updateCartEntry(
+    public ResponseEntity<Response> updateAddress(
             @PathVariable("cartId") UUID cartId,
             @PathVariable("addressType") AddressType addressType,
             @Valid @RequestBody AddressRequestDTO addressFromRequest
     )  {
-        String formattedAddressType = addressType.toString().substring(0,1).toUpperCase() + addressType.toString().substring(1);
+        String formattedAddressType = addressType.toString().substring(0,1).toUpperCase() + addressType.toString().substring(1).toLowerCase();
         Response response = new Response(
                 LocalDateTime.now(),
                 HttpStatus.OK.value(),
@@ -64,7 +64,7 @@ public class AddressController {
     }
 
     @DeleteMapping(path = {"","/"})
-    public ResponseEntity<Response> deleteCartEntry(
+    public ResponseEntity<Response> deleteAddress(
             @PathVariable("cartId") UUID cartId,
             @PathVariable("addressType") AddressType addressType
     )  {

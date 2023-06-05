@@ -12,6 +12,7 @@ import java.util.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Product {
@@ -40,6 +41,8 @@ public class Product {
 	private String currency;
 
 	@NotNull
+	@Column(length=2000)
+	@Size(max=2000)
 	private String description;
 
 	@CreationTimestamp
@@ -64,13 +67,22 @@ public class Product {
 			inverseJoinColumns = @JoinColumn(name = "color_id")
 	)
 	private Set<Color> colors = new HashSet<>();
+
+	@JsonManagedReference
+	@ManyToMany
+	@JoinTable(
+			name = "Product_Category",
+			joinColumns = @JoinColumn(name = "product_id"),
+			inverseJoinColumns = @JoinColumn(name = "name")
+	)
+	private Set<Category> categories = new HashSet<>();
 	
 	public Product() {
 		super();
 	}
 
 	public Product(UUID productId, @NotEmpty(message = "The name can not be empty or null") String name,
-				   Set<Color> colors,@NotNull Integer numberInStock,@NotNull String imageUrl,
+				   Set<Color> colors,@NotNull Integer numberInStock,@NotNull String imageUrl,@NotNull Set<Category> categories,
 				   @NotNull Long priceValue, @NotNull String currency,@NotNull String description) {
 		super();
 		this.productId = productId;
@@ -81,12 +93,21 @@ public class Product {
 		this.priceValue = priceValue;
 		this.currency = currency;
 		this.description = description;
+		this.categories = categories;
 	}
 	
 	public List<CartEntry> getCartEntries() {
 		return cartEntries;
 	}
-	
+
+	public Set<Category> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(Set<Category> categories) {
+		this.categories = categories;
+	}
+
 	public void setCartEntries(List<CartEntry> cartEntries) {
 		this.cartEntries = cartEntries;
 	}

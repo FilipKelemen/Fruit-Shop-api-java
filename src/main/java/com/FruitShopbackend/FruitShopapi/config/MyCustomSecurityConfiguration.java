@@ -1,7 +1,6 @@
 package com.FruitShopbackend.FruitShopapi.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -18,8 +17,8 @@ public class MyCustomSecurityConfiguration {
             .authorizeHttpRequests(authorize -> authorize
                     .antMatchers(
                             "/fruits/product/page-and-number-of-pages-{pageNumber}/sortedBy-{sortingMode}",
+                            "/fruits/category/{category}/{pageNumber}/sorted-by-{sortingMode}",
                             "/fruits/product/page-{pageNumber}/sortedBy-{sortingMode}",
-                            "/fruits/cart/{cartId}/address/{addressType}",
                             "/fruits/product/image/{imageName}").permitAll()
                     .anyRequest().authenticated()
             )

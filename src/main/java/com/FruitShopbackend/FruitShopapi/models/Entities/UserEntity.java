@@ -3,15 +3,11 @@ package com.FruitShopbackend.FruitShopapi.models.Entities;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
@@ -25,8 +21,7 @@ public class UserEntity {
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
 	@JsonManagedReference
-	@Size(max=2)
-	@OneToMany(
+		@OneToMany(
 		fetch = FetchType.LAZY,
 		mappedBy = "userEntityInAddress",
 		cascade = CascadeType.ALL,

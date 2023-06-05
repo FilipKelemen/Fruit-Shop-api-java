@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.FruitShopbackend.FruitShopapi.models.DTOS.AddressRequestDTO;
@@ -25,19 +24,12 @@ public class Address {
 	private String firstName;
 	@NotNull
 	private String lastName;
-	@NotEmpty(message = "Email should not be empty or null")
 	private String email;
-	@NotNull
 	private String phoneNumber;
-	@NotNull
 	private String completeStreet;
-	@NotNull
 	private String country;
-	@NotNull
 	private String state;
-	@NotNull
 	private String city;
-	@NotNull
 	private String postalCode;
 	private String company;
 
@@ -54,12 +46,17 @@ public class Address {
 	private LocalDateTime createdAt;
 	@UpdateTimestamp
 	private LocalDateTime updatedAt;
-	
-	public Address() {
-		super();
+
+	public Address(final AddressType addressType,final String firstName,final String lastName,final String email,final Cart cartInAddress,final UserEntity userEntityInAddress) {
+		this.addressType = addressType;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.cartInAddress = cartInAddress;
+		this.userEntityInAddress = userEntityInAddress;
 	}
 
-	public Address(UUID addressId, AddressType addressType,  AddressRequestDTO addressRequestDTO,  Cart cartInAddress, UserEntity userEntityInAddress) {
+	public Address(UUID addressId, AddressType addressType, AddressRequestDTO addressRequestDTO, Cart cartInAddress, UserEntity userEntityInAddress) {
 		this.addressId = addressId;
 		this.addressType = addressType;
 		this.firstName = addressRequestDTO.getFirstName();
@@ -94,6 +91,10 @@ public class Address {
 		this.company = company;
 		this.cartInAddress = cartInAddress;
 		this.userEntityInAddress = userEntityInAddress;
+	}
+
+	public Address() {
+
 	}
 
 	public UUID getAddressId() {

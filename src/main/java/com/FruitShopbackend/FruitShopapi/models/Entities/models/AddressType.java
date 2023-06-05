@@ -2,8 +2,8 @@ package com.FruitShopbackend.FruitShopapi.models.Entities.models;
 
 public enum AddressType {
 
-	BILLING("BILLING"),
-	DELIVERY("DELIVERY");
+	billing("billing"),
+	delivery("delivery");
 	
 	private final String addressType;
 	

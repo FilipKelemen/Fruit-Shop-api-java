@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -16,7 +15,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Objects;
 
 //App gets here only if authentication was successful
 @Component
@@ -45,9 +43,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
         //as of here, the user is authenticated and tries to access a protected resource
         final String requestURI = request.getRequestURI();
-        final String requestMethod = request.getMethod();
 
-        if(requestURI.startsWith(CART_PATH) && Objects.equals(requestMethod, "GET")) {
+        if(requestURI.startsWith(CART_PATH)) {
             String email = authTokenUtility.getEmailFromAuthToken(token);
             cartRouteHandlingService.handleCartValidity(requestURI, email);
         }

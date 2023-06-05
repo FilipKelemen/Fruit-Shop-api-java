@@ -50,6 +50,7 @@ public class CartEntry {
 					cartEntryToBeCloned.getProduct().getColors(),
 					cartEntryToBeCloned.getProduct().getNumberInStock(),
 					cartEntryToBeCloned.getProduct().getImageUrl(),
+					cartEntryToBeCloned.getProduct().getCategories(),
 					cartEntryToBeCloned.getProduct().getPriceValue(),
 					cartEntryToBeCloned.getProduct().getCurrency(),
 					cartEntryToBeCloned.getProduct().getDescription()

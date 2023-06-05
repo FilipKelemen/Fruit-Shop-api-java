@@ -3,18 +3,24 @@ package com.FruitShopbackend.FruitShopapi.models.Entities;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+import com.FruitShopbackend.FruitShopapi.models.Entities.models.AddressType;
 import com.FruitShopbackend.FruitShopapi.models.Entities.models.StatusInCart;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
+@JsonIgnoreProperties("addresses")
 public class Cart {
 	
 	@Id
@@ -42,8 +48,8 @@ public class Cart {
         orphanRemoval = true
     )
 	private List<CartEntry> cartEntries = new ArrayList<>();
-
 	@JsonManagedReference
+	@Size(max=2)
 	@OneToMany(
 		fetch = FetchType.LAZY,
 		mappedBy = "cartInAddress",
@@ -61,14 +67,15 @@ public class Cart {
 		this.total = 0L;
 		this.status = StatusInCart.ACTIVE;
 	}
-	public Cart(UserEntity userEntityInCart) {
+	public Cart(final UserEntity userEntityInCart) {
 		this.total = 0L;
 		this.status = StatusInCart.ACTIVE;
 		this.userEntityInCart = userEntityInCart;
 	}
 
 	public Cart(UUID cartId, @NotNull Long total, @NotNull String paymentMethod,StatusInCart status,
-			List<CartEntry> cartEntry, List<Address> addresses, UserEntity userEntityInCart) {
+			List<CartEntry> cartEntry, List<Address> addresses, UserEntity userEntityInCart) throws Exception {
+		validateAddresses(addresses);
 		this.cartId = cartId;
 		this.total = total;
 		this.paymentMethod = paymentMethod;
@@ -114,8 +121,46 @@ public class Cart {
 		return this.addresses;
 	}
 
+	public Address getBillingAddress() {
+		return this.addresses.stream().filter(address -> address.getType().equals(AddressType.billing)).findFirst()
+				.orElse(null);
+	}
+
+	public Address getDeliveryAddress() {
+		return this.addresses.stream().filter(address -> address.getType().equals(AddressType.delivery)).findFirst()
+				.orElse(null);
+	}
+
 	public void setAddresses(List<Address> addresses) {
 		this.addresses = addresses;
+	}
+
+	public void setBillingAddress(final Address address) {
+		final Optional<Address> optionalAddress = this.addresses.stream().filter(persistedAddress -> persistedAddress.getType().equals(AddressType.billing)).findFirst();
+		if(optionalAddress.isEmpty()) {
+			this.addresses.add(address);
+		} else {
+			this.addresses = this.addresses.stream()
+					.map(persistedAddress ->
+							persistedAddress.getAddressId() != optionalAddress.get().getAddressId()
+									? persistedAddress
+									: address)
+					.collect(Collectors.toList());
+		}
+	}
+
+	public void setDeliveryAddress(final Address address) {
+		final Optional<Address> optionalAddress = this.addresses.stream().filter(persistedAddress -> persistedAddress.getType().equals(AddressType.delivery)).findFirst();
+		if(optionalAddress.isEmpty()) {
+			this.addresses.add(address);
+		} else {
+			this.addresses = this.addresses.stream()
+					.map(persistedAddress ->
+							persistedAddress.getAddressId() != optionalAddress.get().getAddressId()
+									? persistedAddress
+									: address)
+					.collect(Collectors.toList());
+		}
 	}
 
 	public UserEntity getUserEntityInCart() {
@@ -141,8 +186,15 @@ public class Cart {
 				", paymentMethod='" + paymentMethod + '\'' +
 				", status=" + status +
 				", cartEntries=" + cartEntries +
-				", addresses=" + addresses +
 				'}';
+	}
+
+	private void validateAddresses(final List<Address> addresses) throws Exception {
+		final long numberOfBillingAddresses = addresses.stream().filter(address -> address.getType() == AddressType.billing).count();
+		final long numberOfDeliveryAddresses = addresses.stream().filter(address -> address.getType() == AddressType.delivery).count();
+		if(numberOfBillingAddresses!=1 || numberOfDeliveryAddresses!=1) {
+				throw new Exception("Too many addresses of the same type");
+		}
 	}
 
 	public void updateTotalWithExistingEntry(CartEntry updatedCartEntry) throws Exception {
